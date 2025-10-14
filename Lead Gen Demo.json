@@ -1,0 +1,637 @@
+{
+  "name": "Lead Gen Demo",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        752,
+        224
+      ],
+      "id": "f64544be-5fa0-419e-94f6-b09b839756ba",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "h9OUZZJFsfbifcvp",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const company = $json.company_name || \"Unknown\";\nconst industry = $json.industry || \"General\";\nconst employees = $json.employees || \"N/A\";\n\nconst fakeUpdates = [\n  `${company} recently launched a new initiative in ${industry}.`,\n  `${company} expanded its team to over ${employees} employees.`,\n  `${company} is focusing on growth in the ${industry} sector.`,\n  `${company} is improving its website at ${$json.website}.`\n];\n\nconst randomUpdate = fakeUpdates[Math.floor(Math.random() * fakeUpdates.length)];\n\nreturn [{\n  json: {\n    ...$json,\n    company_insight: randomUpdate\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "c336bc4e-0f48-4c73-a70e-47194f51d686",
+      "name": "Mock Company Insight"
+    },
+    {
+      "parameters": {
+        "content": "## Lead Capture & Storage\nCaptures lead information from a form submission or API call. Automatically appends the new entry into a connected Google Sheet for record-keeping.",
+        "height": 288,
+        "width": 416,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "40aa6021-a392-49da-a625-01e544c88448",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Lead Enrichment & Summarization\nCleans raw lead data and enriches it with AI. The Summarization Chain (powered by Gemini) generates a one-sentence overview summarizing the company’s profile, industry, and scale.",
+        "height": 496,
+        "width": 528,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "514c2824-f819-4b5e-9959-c79938792692",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Insight Generation\nAdds editable fields for manual review and simulates company insights using mock enrichment (useful for demos or testing without external APIs).",
+        "height": 304,
+        "width": 416,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        960,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "3531bbe7-2aad-4743-94d5-fb73ae26344c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## CRM Integration\nAutomatically creates or updates a lead record in Airtable, ensuring all enriched data is pushed to the CRM system.",
+        "height": 352,
+        "width": 208,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "d9e03915-3e02-4afe-82a7-d237c78347ff",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Automated Alerts & Communication\nSends follow-up emails to the lead and internal notifications to staff, ensuring timely engagement and team visibility.",
+        "height": 512,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1648,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "0d7d16fe-fc1d-4e92-85df-99b3c727bd51",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Disclaimer\nThis workflow is a demonstration only and does not use real company or lead data.\n\n- The company enrichment and insight generation steps are **mocked** for simulation.\n- The AI summarization is powered by a test connection (Google Gemini model).\n- The Airtable CRM integration stores sample records only for demo purposes.\n\nIn a production version, these mock nodes could be replaced with live API connections (e.g., Clearbit, Hunter.io, HubSpot CRM API, etc.).",
+        "height": 320,
+        "width": 528,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1040,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "f55b89e6-8dc0-4193-9018-0ead9bc70132",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-form",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "949d1fd2-170d-4b9c-8437-83f7118083d1",
+      "name": "Lead Capture (Form Input)",
+      "webhookId": "5ee33d1d-77bb-41c6-ba3d-187f827ea3f4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WLJeglc5VmmVqt5jZOaNnVW2uHOPTyIgjLQm1msFsbk",
+          "mode": "list",
+          "cachedResultName": "Lead Gen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WLJeglc5VmmVqt5jZOaNnVW2uHOPTyIgjLQm1msFsbk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WLJeglc5VmmVqt5jZOaNnVW2uHOPTyIgjLQm1msFsbk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.body.name }}",
+            "Email": "={{ $json.body.email }}",
+            "Phone": "={{ $json.body.phone }}",
+            "Date": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "034e6910-294d-407d-873c-94c3ee71e8a4",
+      "name": "Log Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ntjzRbGU9MjaywLX",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $json.email || \"unknown@example.com\";\nconst domain = email.split(\"@\")[1] || \"example.com\";\n\nreturn [{\n  json: {\n    ...$json,\n    company_name: domain.replace(\".com\", \"\").toUpperCase(),\n    industry: \"Technology\",\n    website: `https://${domain}`,\n    employees: Math.floor(Math.random() * 500) + 10,\n    enrichment_status: \"Simulated\"\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "55288ce2-baa0-48de-887e-abad9b8b705f",
+      "name": "Format Lead Data (JS)"
+    },
+    {
+      "parameters": {
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "combineMapPrompt": "=Name: {{$json[\"Name\"]}}\nCompany: {{$json[\"company_name\"]}}\nIndustry: {{$json[\"industry\"]}}\nWebsite: {{$json[\"website\"]}}\nEmployees: {{$json[\"employees\"]}}\nEnrichment Status: {{$json[\"enrichment_status\"]}}\n\nSummarize this lead in one concise professional sentence describing what the company does and its scale.\n",
+              "prompt": "Combine all the summaries below into a single short paragraph describing the lead clearly and professionally.\n\n{text}\n\nCONCISE SUMMARY:"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "fdd4ab22-e296-43f1-9b62-a4306df0cd7f",
+      "name": "Summarize Lead Profile"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a9915442-ffaf-4dfa-9d90-d6fa31324582",
+              "name": "lead_summary",
+              "value": "={{ $json.output.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "bf1a3fc6-c8cf-4b5c-a910-bc2be89dd8af",
+      "name": "Edit & Review Lead Summary"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appAxcpkP6zA6R8ec",
+          "mode": "list",
+          "cachedResultName": "CRM Leads",
+          "cachedResultUrl": "https://airtable.com/appAxcpkP6zA6R8ec"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblWq2yNmbKFKxy8H",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appAxcpkP6zA6R8ec/tblWq2yNmbKFKxy8H"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Format Lead Data (JS)').item.json.Name }}",
+            "Email": "={{ $('Format Lead Data (JS)').item.json.Email }}",
+            "Company": "={{ $('Format Lead Data (JS)').item.json.company_name }}",
+            "Industry": "={{ $('Format Lead Data (JS)').item.json.industry }}",
+            "Company Insight": "={{ $json.company_insight }}",
+            "Website": "={{ $('Format Lead Data (JS)').item.json.website }}",
+            "Employees": "={{ $('Format Lead Data (JS)').item.json.employees }}",
+            "Summary": "={{ $json.lead_summary }}",
+            "Date": "={{ $('Format Lead Data (JS)').item.json.Date }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company Insight",
+              "displayName": "Company Insight",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Employees",
+              "displayName": "Employees",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1456,
+        0
+      ],
+      "id": "47d118a8-6a8f-4b98-b944-85252d48a259",
+      "name": "Add Lead to CRM",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "B4KKP3NQ5iWFACpF",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "cabunocsv@gmail.com",
+        "toEmail": "cabunocsv@gmail.com",
+        "subject": "=Thanks for connecting with us, {{ $json.fields.Name }}",
+        "emailFormat": "text",
+        "text": "=Hi {{ $json.fields.Name }},\n\nThanks for reaching out! We’re thrilled to learn more about {{ $json.fields.Company }} in the {{ $json.fields.Industry }} industry.\n\nHere’s what we know so far:\n{{ $('Edit & Review Lead Summary').item.json.lead_summary }}\n\nInsight: {{ $json.fields['Company Insight'] }}\n\nWe'll be in touch soon!\n\n— n8n Team\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        -96
+      ],
+      "id": "84fd7c52-9899-405a-ad4e-8d165531c03d",
+      "name": "Send Follow-Up Email",
+      "webhookId": "ff6c88b1-5f79-418a-971d-436bdcf7993f",
+      "credentials": {
+        "smtp": {
+          "id": "fpXtpI6fkKA0bMRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "cabunocsv@gmail.com",
+        "toEmail": "cabunocsv@gmail.com",
+        "subject": "=New Lead: {{ $json.fields.Name }}",
+        "emailFormat": "text",
+        "text": "=A new lead has been added to Airtable:\n\nName: {{ $json.fields.Name }}\nEmail: {{ $json.fields.Email }}\nCompany: {{ $json.fields.Company }}\nWebsite: {{ $json.fields.Website }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        96
+      ],
+      "id": "567d11ab-b69d-4f06-94e6-bdf057ef78eb",
+      "name": "Notify Sales Team",
+      "webhookId": "c4017a87-19b8-4f40-92bd-724d4ed7d5bc",
+      "credentials": {
+        "smtp": {
+          "id": "fpXtpI6fkKA0bMRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Form Input\nThe lead capture form was built using HTML and connected to this workflow via the Webhook URL.\n\nWhen a user submits their Name, Email, and Phone number, the form sends a POST request to the Webhook node (/lead-form).\n\nThis triggers the workflow to start the lead generation and enrichment process automatically.",
+        "height": 304,
+        "width": 416,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "de164fd8-8bfc-4862-8893-5763ce2ceaa8",
+      "name": "Sticky Note6"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarize Lead Profile",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Company Insight": {
+      "main": [
+        [
+          {
+            "node": "Add Lead to CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Capture (Form Input)": {
+      "main": [
+        [
+          {
+            "node": "Log Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Lead": {
+      "main": [
+        [
+          {
+            "node": "Format Lead Data (JS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Lead Data (JS)": {
+      "main": [
+        [
+          {
+            "node": "Summarize Lead Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Lead Profile": {
+      "main": [
+        [
+          {
+            "node": "Edit & Review Lead Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit & Review Lead Summary": {
+      "main": [
+        [
+          {
+            "node": "Mock Company Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Lead to CRM": {
+      "main": [
+        [
+          {
+            "node": "Send Follow-Up Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify Sales Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Follow-Up Email": {
+      "main": [
+        []
+      ]
+    },
+    "Notify Sales Team": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "v8b80jZfVjOumPOQ"
+  },
+  "versionId": "dd83f96b-275e-4cfb-ba39-3d5775c1294a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6561f2320674d105d988091d1decad95f865eb2e0686244140d5aefe7b7f522d"
+  },
+  "id": "lZaSd0oU3JjFtQUY",
+  "tags": [
+    {
+      "createdAt": "2025-10-14T08:54:39.766Z",
+      "updatedAt": "2025-10-14T08:54:39.766Z",
+      "id": "nPgtMmFqLqqAJi2k",
+      "name": "portfolio"
+    }
+  ]
+}
