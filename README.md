@@ -10,12 +10,13 @@ The workflow captures leads from an HTML form, enriches their data (mocked for d
 ## Features
 
 - **Lead Capture (Webhook)** — Collects data (Name, Email, Phone) from a custom HTML form.  
-- **Data Formatting (Code Node)** — Cleans and structures incoming data.  
-- **AI Summary (Summarization Chain)** — Creates short summaries about the lead using mock data.  
+- **Data Formatting** — Cleans and structures incoming data using JavaScript.  
+- **AI Summary (Summarization Chain)** — Creates short summaries about the lead using Gemini.  
 - **Mock Enrichment** — Adds fake company insights for demo purposes.  
 - **CRM Integration (Airtable)** — Saves enriched leads to Airtable.  
-- **Follow-up Automation** — Optionally sends a sample confirmation or internal notification.  
-- **Error Handling** — Catches and logs any failed API or network steps.
+- **Follow-up Automation** — Sends a follow-up email to the lead.
+- **Internal Notification** - Notify sales team of a new lead.
+- **Error Handling** — Sends an email to the staff instantly when error occurs.
 
 ---
 
