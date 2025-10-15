@@ -39,7 +39,7 @@ The workflow captures leads from an HTML form, enriches their data (mocked for d
 ## Author
 
 **Sandy Vienne Cabunoc**  
-AI Automation Enthusiast
+AI Automation Specialist
 
 📧 cabunocsv@gmail.com
 
